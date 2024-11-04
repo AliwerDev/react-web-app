@@ -12,6 +12,10 @@ const Home: React.FC = () => {
       <h1>Home Page sdfasdfsd</h1>
       <p>Welcome! Select an option to proceed:</p>
 
+      <pre>
+        <code>{JSON.stringify(window.Telegram.WebApp.initDataUnsafe || {})}</code>
+      </pre>
+
       <nav>
         <Link to="/">Home</Link> |<Link to="/add-product">Add Product</Link> |<Link to="/add-member">Add Member</Link>
       </nav>
