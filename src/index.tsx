@@ -11,7 +11,7 @@ declare global {
 function TelegramInitializer() {
   useEffect(() => {
     if (window.Telegram) {
-      window.Telegram.WebApp.init();
+      window.Telegram.WebApp.ready();
     }
   }, []);
 

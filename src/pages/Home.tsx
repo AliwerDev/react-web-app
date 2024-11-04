@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   useEffect(() => {
@@ -10,6 +11,10 @@ const Home: React.FC = () => {
     <div>
       <h1>Home Page</h1>
       <p>Welcome! Select an option to proceed:</p>
+
+      <nav>
+        <Link to="/">Home</Link> |<Link to="/add-product">Add Product</Link> |<Link to="/add-member">Add Member</Link>
+      </nav>
     </div>
   );
 };
