@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 
 declare global {
@@ -18,4 +18,8 @@ function TelegramInitializer() {
   return <App />;
 }
 
-ReactDOM.render(<TelegramInitializer />, document.getElementById("root"));
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(<TelegramInitializer />);
+}
