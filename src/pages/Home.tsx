@@ -8,7 +8,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="main-container">
       <h1>Home Page sdfasdfsd</h1>
       <p>Welcome! Select an option to proceed:</p>
 

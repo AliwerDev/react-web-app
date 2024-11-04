@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { WebAppProvider } from "@vkruglikov/react-telegram-web-app";
 
 declare global {
   interface Window {
@@ -15,7 +16,15 @@ function TelegramInitializer() {
     }
   }, []);
 
-  return <App />;
+  return (
+    <WebAppProvider
+      options={{
+        smoothButtonsTransition: true,
+      }}
+    >
+      <App />
+    </WebAppProvider>
+  );
 }
 
 const rootElement = document.getElementById("root");

@@ -15,7 +15,7 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="main-container">
       <h1>Add Product</h1>
       <input type="text" placeholder="Enter product name" value={productName} onChange={(e) => setProductName(e.target.value)} />
       <button onClick={handleAddProduct}>Add Product</button>
