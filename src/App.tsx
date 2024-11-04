@@ -1,9 +1,10 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import AddMember from "./pages/AddMember";
 import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
+import "./App.scss";
 
 const App: React.FC = () => {
   return (
