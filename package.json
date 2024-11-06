@@ -13,8 +13,10 @@
     "@vkruglikov/react-telegram-web-app": "^2.1.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.1",
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.8.2",
     "telegram-webapps-types": "^1.0.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -44,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-select": "^5.0.1",
     "sass": "^1.80.6",
     "telegram-webapps": "^7.10.0"
   }

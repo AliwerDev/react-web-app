@@ -5,6 +5,7 @@ import AddMember from "./pages/AddMember";
 import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import "./App.scss";
+import AddEmployee from "./pages/AddEmployee";
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,8 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/add-member" element={<AddMember />} />
+        <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="*" element={<h1>Page not found</h1>} />
       </Routes>
     </BrowserRouter>
   );

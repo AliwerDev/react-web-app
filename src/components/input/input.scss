@@ -1,0 +1,106 @@
+$input-border-color: var(--tg-theme-link-color, #000);
+$input-bg-color: var(--tg-theme-bg-color, #ffffff);
+$input-text-color: var(--tg-theme-text-color, #222222);
+$input-hint-color: var(--tg-theme-hint-color, #ccc);
+$input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
+
+.input-container {
+  margin-bottom: 15px;
+}
+
+.input-field {
+  display: block;
+  box-sizing: border-box;
+  font-size: 14px;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid $input-border-color;
+  background-color: $input-bg-color;
+  border-radius: 4px;
+  color: $input-text-color;
+  text-align: start;
+  outline: none;
+  outline-color: $input-border-color !important;
+
+  &.input-error {
+    border-color: $input-error-color;
+  }
+}
+
+.phone-input-container {
+  position: relative;
+
+  input {
+    padding-left: 48px;
+  }
+
+  &::before {
+    content: "+998";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    height: 18px;
+    color: $input-text-color;
+  }
+}
+
+label {
+  color: $input-text-color;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+
+  &.required {
+    &::after {
+      content: "*";
+      color: $input-error-color;
+      margin-left: 2px;
+    }
+  }
+
+  &.error {
+    color: $input-error-color;
+  }
+}
+
+.error-message {
+  color: $input-error-color;
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+input[type="text"]::-webkit-input-placeholder {
+  color: $input-hint-color;
+}
+
+input[type="text"]::-moz-placeholder {
+  color: $input-hint-color;
+}
+
+input[type="text"]:-ms-input-placeholder {
+  color: $input-hint-color;
+}
+
+.input[data-placeholder] {
+  position: relative;
+}
+
+.input[data-placeholder]:empty:before {
+  position: absolute;
+  left: 0;
+  right: 0;
+  content: attr(data-placeholder);
+  color: $input-hint-color;
+  padding: 0 20px;
+  font-weight: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
