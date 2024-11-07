@@ -28,6 +28,7 @@ $input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
 
   &.input-error {
     border-color: $input-error-color;
+    outline-color: $input-error-color !important;
   }
 }
 

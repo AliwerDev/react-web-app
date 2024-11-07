@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-import AddMember from "./pages/AddMember";
-import Home from "./pages/Home";
-import AddProduct from "./pages/AddProduct";
+import React, { Suspense, useEffect } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import routes from "./services/routes";
 import "./App.scss";
-import AddEmployee from "./pages/AddEmployee";
 import useWebApp from "./hooks/use-webapp";
+
+const router = createBrowserRouter(routes);
 
 const App: React.FC = () => {
   const webapp = useWebApp();
@@ -20,15 +18,15 @@ const App: React.FC = () => {
   }, [webapp]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add-product" element={<AddProduct />} />
-        <Route path="/add-member" element={<AddMember />} />
-        <Route path="/add-employee" element={<AddEmployee />} />
-        <Route path="*" element={<h1>Page not found</h1>} />
-      </Routes>
-    </BrowserRouter>
+    <Suspense
+      fallback={
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      }
+    >
+      <RouterProvider router={router} />
+    </Suspense>
   );
 };
 

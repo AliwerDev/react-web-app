@@ -16,9 +16,10 @@ interface SelectProps {
   placeholder?: string;
   label?: string;
   rules?: Record<string, any>;
+  isSearchable?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false, placeholder = "Select...", label, rules = {} }) => {
+const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false, placeholder = "Select...", label, rules = {}, isSearchable = false }) => {
   return (
     <div className="select-container">
       <Controller
@@ -37,6 +38,7 @@ const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false
               options={options}
               isMulti={isMulti}
               placeholder={placeholder}
+              isSearchable={isSearchable}
               classNamePrefix="react-select"
               onChange={(selected) => {
                 const value = isMulti ? (selected as MultiValue<Option>)?.map((option) => option.value) || [] : (selected as SingleValue<Option>)?.value || null;
