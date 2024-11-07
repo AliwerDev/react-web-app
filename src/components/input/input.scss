@@ -21,8 +21,10 @@ $input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
   border-radius: 4px;
   color: $input-text-color;
   text-align: start;
-  outline: none;
-  outline-color: $input-border-color !important;
+
+  &:focus {
+    outline: 2px solid $input-border-color !important;
+  }
 
   &.input-error {
     border-color: $input-error-color;
@@ -32,7 +34,19 @@ $input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
 .phone-input-container {
   position: relative;
 
-  input {
+  /* For Chrome, Safari, Edge, and Opera */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* For Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"] {
     padding-left: 48px;
   }
 

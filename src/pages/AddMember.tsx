@@ -1,11 +1,7 @@
-import { MainButton, useShowPopup } from "@vkruglikov/react-telegram-web-app";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const AddMember: React.FC = () => {
   const [memberName, setMemberName] = useState<string>("");
-  const showPopup = useShowPopup();
-
-  const tg = useMemo(() => window.Telegram.WebApp, []);
 
   useEffect(() => {
     const backButton = window.Telegram.WebApp.BackButton;
@@ -22,15 +18,7 @@ const AddMember: React.FC = () => {
   return (
     <div className="main-container">
       <h1>Add Member</h1>
-      <MainButton
-        onClick={() => {
-          tg.close();
-          showPopup({
-            message: "back button click",
-          });
-        }}
-        text="Main button"
-      />
+
       <input type="text" placeholder="Enter member name" value={memberName} onChange={(e) => setMemberName(e.target.value)} />
       <button onClick={handleAddMember}>Add Member</button>
     </div>

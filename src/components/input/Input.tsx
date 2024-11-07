@@ -11,6 +11,7 @@ interface InputProps {
   type?: string;
   rules?: Record<string, any>;
   defaultValue?: string;
+  maxLength?: number;
 }
 
 const Input: React.FC<InputProps> = ({ control, name, placeholder = "", label, type = "text", rules = {}, defaultValue = "" }) => {

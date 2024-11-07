@@ -21,6 +21,7 @@ $input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
   color: $input-text-color !important;
   border: 1px solid $input-border-color !important;
   background-color: $input-bg-color !important;
+  box-shadow: none !important;
 
   .react-select__input {
     color: $input-text-color !important;
@@ -29,6 +30,10 @@ $input-error-color: var(--tg-theme-destructive-text-color, #ef1717);
   &:hover {
     border-color: var(--tg-theme-link-color, #666666);
   }
+}
+
+.react-select__control--is-focused {
+  outline: 2px solid $input-border-color !important;
 }
 
 .react-select__placeholder {

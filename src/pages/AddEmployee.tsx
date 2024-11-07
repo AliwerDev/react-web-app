@@ -2,56 +2,79 @@ import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Select from "../components/select/Select";
 import Input from "../components/input/Input";
+import useWebApp from "../hooks/use-webapp";
 
 const roles = [
+  { value: "seller", label: "Sotuvchi" },
   { value: "director", label: "Direktor" },
   { value: "purchaser", label: "Xarid qiluvchi" },
   { value: "sewer", label: "Bichuvchi" },
   { value: "tailor", label: "Tikuvchi" },
   { value: "packer", label: "Upakovkachi" },
-  { value: "seller", label: "Sotuvchi" },
   { value: "warehouse_worker", label: "Skladchi" },
 ];
+
+const initialValues = {
+  role: roles[0].value,
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
+};
 
 const uzbPhoneRegex = /^\d{9}$/;
 
 const AddEmployee: React.FC = () => {
+  const webapp = useWebApp();
   const submitRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const app = window.Telegram.WebApp;
-    app.expand();
-    app.enableClosingConfirmation("Qilgan o'zgarishlaringiz saqlanmagan bo'lishi mumkin");
-
-    const mainButton = app.MainButton;
-    mainButton.text = "Saqlash";
-    mainButton.onClick(() => submitRef.current?.click());
-    mainButton.show();
-    mainButton.enable();
-  }, []);
+    webapp.MainButton.text = "Hodim qo'shish";
+    webapp.MainButton.onClick(() => submitRef.current?.click());
+    webapp.MainButton.show();
+    webapp.MainButton.enable();
+  }, [webapp]);
 
   const {
     control,
     handleSubmit,
+    reset,
+    setFocus,
     // formState: { isValid },
-  } = useForm();
+  } = useForm({ defaultValues: initialValues });
+
+  const clearForm = () => {
+    setFocus("firstName");
+    reset(initialValues);
+  };
 
   // useEffect(() => {
-  //   const mainButton = window.Telegram.WebApp.MainButton;
-
   //   if (isValid) {
-  //     mainButton.show();
+  //     webapp.MainButton.enable();
   //   } else {
-  //     mainButton.hide();
+  //     webapp.MainButton.disable();
   //   }
-  // }, [isValid]);
+  // }, [isValid, webapp.MainButton]);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    window.Telegram.WebApp.MainButton?.showProgress(true);
+    webapp.MainButton?.showProgress(true);
     window.setTimeout(() => {
-      window.Telegram.WebApp.MainButton?.hideProgress();
-      window.Telegram.WebApp.showAlert("🚀 Hodim muvaffiqiyatli qo'shildi!");
-      window.Telegram.WebApp.close();
+      webapp.MainButton?.hideProgress();
+      webapp.showPopup(
+        {
+          title: "🎉 Hodim muvaffaqqiyatli qo'shildi!",
+          message: `Ismi: ${data.firstName}, Lavozimi: ${data.role}, Telefon: +998${data.phoneNumber}`,
+          buttons: [
+            { id: "AGAIN", text: "Yana qo'shish", type: "default" },
+            { id: "CLOSE", text: "Yopish", type: "default" },
+          ],
+        },
+        (id) => {
+          if (id === "AGAIN") clearForm();
+          else if (id === "CLOSE") {
+            webapp.close();
+          }
+        }
+      );
     }, 2000);
     console.log(data);
   };
@@ -62,7 +85,6 @@ const AddEmployee: React.FC = () => {
       <p>Hodim qo'shish uchun quidagi malumotlarni to'ldiring:</p>
 
       <form style={{ marginBlock: "20px" }} onSubmit={handleSubmit(onSubmit)}>
-        <Select label="Hodim roli" placeholder="Rol qidirish" control={control} name="role" options={roles} rules={{ required: true }} />
         <Input label="Ism" control={control} placeholder="Ism kiriting" name="firstName" rules={{ required: true, minLength: { value: 3, message: "Ism kamida 3 harf bo'lishi kerak" } }} />
         <Input label="Familiya" control={control} placeholder="Familiya kiriting" name="lastName" />
 
@@ -74,12 +96,15 @@ const AddEmployee: React.FC = () => {
           placeholder="99 999 99 99"
           rules={{
             required: true,
+            maxLength: { value: 9 },
             pattern: {
               value: uzbPhoneRegex,
               message: "Telefon raqam formati xato, (Misol: +998901234567)",
             },
           }}
         />
+
+        <Select label="Hodim roli" placeholder="Rol qidirish" control={control} name="role" options={roles} rules={{ required: true }} />
 
         <button ref={submitRef} type="submit" className="hidden" />
       </form>
