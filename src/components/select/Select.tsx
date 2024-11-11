@@ -1,7 +1,9 @@
 import React from "react";
 import ReactSelect, { MultiValue, SingleValue } from "react-select";
 import { Control, Controller } from "react-hook-form";
-import "./select.scss";
+import StyledSelectContainer from "./styled";
+import Label from "../label";
+import { inputErrorMessage } from "../../utils/helpers";
 
 interface Option {
   value: string;
@@ -21,18 +23,19 @@ interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false, placeholder = "Select...", label, rules = {}, isSearchable = false }) => {
   return (
-    <div className="select-container">
+    <StyledSelectContainer>
       <Controller
         name={name}
         control={control}
         rules={rules}
         render={({ field, fieldState: { error } }) => (
           <>
-            {label && (
-              <label htmlFor={name} className={`input-label ${error ? "error" : ""} ${!!rules.required ? "required" : ""}`}>
+            {label ? (
+              <Label htmlFor={name} required={rules.required} error={!!error}>
                 {label}
-              </label>
-            )}
+              </Label>
+            ) : null}
+
             <ReactSelect
               {...field}
               options={options}
@@ -47,11 +50,12 @@ const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false
               value={isMulti ? options.filter((option) => (field.value as string[])?.includes(option.value)) : options.find((option) => option.value === field.value)}
               className={error ? "react-select-error" : ""}
             />
-            {error && <span className="error-message">{error.message || error.type === "required" ? label + "ni tanlash majburiy" : ""}</span>}
+
+            {error ? <Label.Error message={inputErrorMessage(error, label)} /> : null}
           </>
         )}
       />
-    </div>
+    </StyledSelectContainer>
   );
 };
 

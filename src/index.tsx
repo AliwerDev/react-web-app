@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { Global } from "@emotion/react";
+import globalStyles from "./theme";
 
 declare global {
   interface Window {
@@ -15,7 +17,12 @@ function TelegramInitializer() {
     }
   }, []);
 
-  return <App />;
+  return (
+    <>
+      <Global styles={globalStyles} />
+      <App />
+    </>
+  );
 }
 
 const rootElement = document.getElementById("root");

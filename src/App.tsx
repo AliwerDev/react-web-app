@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./services/routes";
-import "./App.scss";
 import useWebApp from "./hooks/use-webapp";
 
 const router = createBrowserRouter(routes);

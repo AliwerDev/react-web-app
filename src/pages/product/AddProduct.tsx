@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "../components/input/Input";
-import useWebApp from "../hooks/use-webapp";
+import Input from "../../components/input/Input";
+import useWebApp from "../../hooks/use-webapp";
 
 type IProduct = {
   name: string;
@@ -13,7 +13,7 @@ const initialValues: IProduct = {
   unit: "",
 };
 
-const AddSemiFinishedProduct: React.FC = () => {
+const AddFinishedProduct: React.FC = () => {
   const webapp = useWebApp();
   const submitRef = useRef<HTMLButtonElement>(null);
 
@@ -57,7 +57,7 @@ const AddSemiFinishedProduct: React.FC = () => {
 
   return (
     <div className="main-container">
-      <h1>Yarm tayyor mahsulot qo'shish</h1>
+      <h1>Tayyor mahsulot qo'shish</h1>
       <p>Quidagi malumotlarni to'ldiring:</p>
 
       <form style={{ marginBlock: "20px" }} onSubmit={handleSubmit(onSubmit)}>
@@ -70,4 +70,4 @@ const AddSemiFinishedProduct: React.FC = () => {
   );
 };
 
-export default AddSemiFinishedProduct;
+export default AddFinishedProduct;

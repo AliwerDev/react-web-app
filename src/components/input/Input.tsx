@@ -1,7 +1,8 @@
 import React from "react";
 import { Control, Controller } from "react-hook-form";
-import "./input.scss";
 import { inputErrorMessage } from "../../utils/helpers";
+import InputStyledContainer from "./styled";
+import Label from "../label";
 
 interface InputProps {
   control: Control<any>;
@@ -16,7 +17,7 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = ({ control, name, placeholder = "", label, type = "text", rules = {}, defaultValue = "" }) => {
   return (
-    <div className="input-container">
+    <InputStyledContainer>
       <Controller
         name={name}
         control={control}
@@ -24,11 +25,11 @@ const Input: React.FC<InputProps> = ({ control, name, placeholder = "", label, t
         defaultValue={defaultValue}
         render={({ field, fieldState: { error } }) => (
           <>
-            {label && (
-              <label htmlFor={name} className={`input-label ${error ? "error" : ""} ${!!rules.required ? "required" : ""}`}>
+            {label ? (
+              <Label htmlFor={name} required={rules.required} error={!!error}>
                 {label}
-              </label>
-            )}
+              </Label>
+            ) : null}
 
             {type === "phone" ? (
               <div className="phone-input-container">
@@ -39,11 +40,11 @@ const Input: React.FC<InputProps> = ({ control, name, placeholder = "", label, t
               <input {...field} id={name} type={type} placeholder={placeholder} className={`input-field ${error ? "input-error" : ""}`} />
             )}
 
-            {error && <span className="error-message">{inputErrorMessage(error, label)}</span>}
+            {error ? <Label.Error message={inputErrorMessage(error, label)} /> : null}
           </>
         )}
       />
-    </div>
+    </InputStyledContainer>
   );
 };
 

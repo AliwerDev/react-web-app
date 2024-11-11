@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const pages = [
-  { path: "/", name: "Home", component: () => <h2>Home Page</h2> },
-  { path: "/add-employee", name: "Employee", component: () => <h2>Employee Page</h2> },
-  { path: "/add-finished-product", name: "Finished Product", component: () => <h2>Finished Product Page</h2> },
-  { path: "/add-semi-finished-product", name: "Semi-Finished Product", component: () => <h2>Semi-Finished Product Page</h2> },
-  { path: "/add-raw-seller", name: "Raw Seller", component: () => <h2>Raw Seller Page</h2> },
-  { path: "/add-raw", name: "Raw", component: () => <h2>Raw Page</h2> },
-  { path: "/add-customer", name: "Customer", component: () => <h2>Customer Page</h2> },
+  { path: "/", name: "🏠 Bosh sahifa", component: () => <h2>Bosh sahifa</h2> },
+  { path: "/employees/add", name: "👤 Xodim +", component: () => <h2>Xodim sahifasi</h2> },
+  { path: "/employees", name: "👤 Xodimlar", component: () => <h2>Xodim sahifasi</h2> },
+  { path: "/add-finished-product", name: "📦 Tayyor mahsulot", component: () => <h2>Tayyor mahsulot sahifasi</h2> },
+  { path: "/add-semi-finished-product", name: "⚙️ Yarim tayyor mahsulot", component: () => <h2>Yarim tayyor mahsulot sahifasi</h2> },
+  { path: "/add-raw-seller", name: "🏢 Xomashyo sotuvchisi", component: () => <h2>Xomashyo sotuvchisi sahifasi</h2> },
+  { path: "/add-raw", name: "🌾 Xomashyo", component: () => <h2>Xomashyo sahifasi</h2> },
+  { path: "/add-customer", name: "👥 Mijoz", component: () => <h2>Mijoz sahifasi</h2> },
 ];
 
 const Home: React.FC = () => {
@@ -17,11 +18,13 @@ const Home: React.FC = () => {
       <h1>Home Page</h1>
       <p>Welcome! Select an option to proceed:</p>
 
-      {pages.map(({ path, name }) => (
-        <Link key={path} to={path}>
-          <button>{name}</button>
-        </Link>
-      ))}
+      <div className="pages">
+        {pages.map(({ path, name }) => (
+          <Link key={path} to={path}>
+            <button>{name}</button>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

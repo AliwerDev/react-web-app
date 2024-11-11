@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "../components/input/Input";
-import useWebApp from "../hooks/use-webapp";
+import Input from "../../components/input/Input";
+import useWebApp from "../../hooks/use-webapp";
 
 type IRawSeller = {
   firstName: string;

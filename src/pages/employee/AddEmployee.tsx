@@ -1,46 +1,65 @@
 import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "../components/input/Input";
-import useWebApp from "../hooks/use-webapp";
+import Select from "../../components/select/Select";
+import Input from "../../components/input/Input";
+import useWebApp from "../../hooks/use-webapp";
 
-type ICustomer = {
+const roles = [
+  { value: "seller", label: "Sotuvchi" },
+  { value: "director", label: "Direktor" },
+  { value: "purchaser", label: "Xarid qiluvchi" },
+  { value: "sewer", label: "Bichuvchi" },
+  { value: "tailor", label: "Tikuvchi" },
+  { value: "packer", label: "Upakovkachi" },
+  { value: "warehouse_worker", label: "Skladchi" },
+];
+
+type IEmployee = {
   firstName: string;
   phoneNumber: string;
+  role: string;
 };
 
-const initialValues: ICustomer = {
+const initialValues: IEmployee = {
+  role: roles[0].value,
   firstName: "",
   phoneNumber: "",
 };
 
 const uzbPhoneRegex = /^\d{9}$/;
 
-const AddCustomer: React.FC = () => {
+const AddEmployee: React.FC = () => {
   const webapp = useWebApp();
   const submitRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    webapp.MainButton.text = "Qo'shish";
+    webapp.MainButton.text = "Hodim qo'shish";
     webapp.MainButton.onClick(() => submitRef.current?.click());
     webapp.MainButton.show();
     webapp.MainButton.enable();
   }, [webapp]);
 
-  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setFocus,
+    // formState: { isValid },
+  } = useForm({ defaultValues: initialValues });
 
   const clearForm = () => {
     setFocus("firstName");
     reset(initialValues);
   };
 
-  const onSubmit: SubmitHandler<ICustomer> = (data) => {
+  const onSubmit: SubmitHandler<IEmployee> = (data) => {
     webapp.MainButton?.showProgress(true);
     window.setTimeout(() => {
       webapp.MainButton?.hideProgress();
       webapp.showPopup(
         {
-          title: "🎉 Mijoz muvaffaqqiyatli qo'shildi!",
-          message: `Ismi: ${data.firstName}, Telefon: +998${data.phoneNumber}`,
+          title: "🎉 Muvaffaqqiyatli qo'shildi!",
+          message: `Ismi: ${data.firstName}, Lavozimi: ${data.role}, Telefon: +998${data.phoneNumber}`,
           buttons: [
             { id: "CLOSE", text: "Yopish", type: "default" },
             { id: "AGAIN", text: "Yana qo'shish", type: "default" },
@@ -59,8 +78,8 @@ const AddCustomer: React.FC = () => {
 
   return (
     <div className="main-container">
-      <h1>Mijoz qo'shish</h1>
-      <p>Quidagi malumotlarni to'ldiring:</p>
+      <h1>Hodim qo'shish</h1>
+      <p>Hodim qo'shish uchun quidagi malumotlarni to'ldiring:</p>
 
       <form style={{ marginBlock: "20px" }} onSubmit={handleSubmit(onSubmit)}>
         <Input label="Ism" control={control} placeholder="Ism kiriting" name="firstName" rules={{ required: true, minLength: { value: 3, message: "Ism kamida 3 harf bo'lishi kerak" } }} />
@@ -81,10 +100,12 @@ const AddCustomer: React.FC = () => {
           }}
         />
 
+        <Select label="Hodim roli" placeholder="Rol qidirish" control={control} name="role" options={roles} rules={{ required: true }} />
+
         <button ref={submitRef} type="submit" className="hidden" />
       </form>
     </div>
   );
 };
 
-export default AddCustomer;
+export default AddEmployee;
