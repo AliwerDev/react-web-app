@@ -3,12 +3,15 @@ import { css } from "@emotion/react";
 export const theme = {
   borderColor: "var(--tg-theme-link-color, #000)",
   bgColor: "var(--tg-theme-bg-color, #ffffff)",
+  secondaryBgColor: "var(--tg-theme-secondary-bg-color, #efefef)",
   textColor: "var(--tg-theme-text-color, #222222)",
   hintColor: "var(--tg-theme-hint-color, #ccc)",
   errorColor: "var(--tg-theme-destructive-text-color, #ef1717)",
   linkColor: "var(--tg-theme-link-color, #000)",
   destructiveText: "var(--tg-theme-destructive-text-color, #ef1717)",
   linkHoverColor: "var(--tg-theme-link-hover-color, #666666)",
+  buttonColor: "var(--tg-theme-button-color, #50a8eb)",
+  buttonTextColor: "var(--tg-theme-button-text-color, #fff)",
 };
 
 const globalStyles = css`
@@ -42,19 +45,6 @@ const globalStyles = css`
     border: none;
   }
 
-  button {
-    display: block;
-    width: 100%;
-    font-size: 14px;
-    margin: 15px 0;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--tg-theme-button-color, #50a8eb);
-    color: var(--tg-theme-button-text-color, #ffffff);
-    cursor: pointer;
-  }
-
   .main-container {
     padding: 15px;
   }
@@ -86,24 +76,6 @@ const globalStyles = css`
     margin: 0 0 15px;
   }
 
-  button[disabled] {
-    opacity: 0.6;
-    cursor: auto;
-    pointer-events: none;
-  }
-
-  button.close_btn {
-    /*position: fixed;*/
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 0;
-    margin: 0;
-    padding: 16px 20px;
-    text-transform: uppercase;
-  }
-
   p {
     margin: 40px 0 15px;
   }
@@ -129,9 +101,9 @@ const globalStyles = css`
     color: red;
   }
 
-  .hidden {
+  /* .hidden {
     display: none;
-  }
+  } */
 
   h1 {
     font-size: 1.5rem;

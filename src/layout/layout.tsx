@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import useWebApp from "../../hooks/use-webapp";
+import useWebApp from "../hooks/use-webapp";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -10,7 +10,7 @@ const Layout = () => {
   useEffect(() => {
     if (pathname !== "/") {
       webapp.BackButton.show();
-      webapp.BackButton.onClick(() => navigate("/"));
+      webapp.BackButton.onClick(() => navigate(-1));
     } else {
       webapp.BackButton.hide();
       webapp.MainButton.hide();

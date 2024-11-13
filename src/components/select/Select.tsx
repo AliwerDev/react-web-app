@@ -5,7 +5,7 @@ import StyledSelectContainer from "./styled";
 import Label from "../label";
 import { inputErrorMessage } from "../../utils/helpers";
 
-interface Option {
+export interface Option {
   value: string;
   label: string;
 }

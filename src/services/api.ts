@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError, Method, InternalAxiosRequestConfig } from "axios";
 
 export const api = axios.create({
-  baseURL: "base url",
+  baseURL: "http://212.56.43.170/api/v1",
 });
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -28,28 +28,28 @@ api.interceptors.response.use(
 
 interface RequestOptions {
   url: string;
-  attributes?: Record<string, any> | null;
+  data?: Record<string, any> | null;
   method?: Method;
   success?: (response: AxiosResponse) => void;
   fail?: (error: AxiosError) => void;
 }
 
-export const request = async ({ url, attributes = null, method = "get", success = () => {}, fail = () => {} }: RequestOptions): Promise<void> => {
+export const request = async ({ url, data = null, method = "get", success = () => {}, fail = () => {} }: RequestOptions): Promise<void> => {
   try {
     let response: AxiosResponse;
 
     switch (method) {
-      case "patch":
-        response = await api.patch(url, attributes);
+      case "PATCH":
+        response = await api.patch(url, data);
         break;
-      case "put":
-        response = await api.put(url, attributes);
+      case "PUT":
+        response = await api.put(url, data);
         break;
-      case "delete":
-        response = await api.delete(url, { data: attributes });
+      case "DELETE":
+        response = await api.delete(url, { data: data });
         break;
-      case "post":
-        response = await api.post(url, attributes);
+      case "POST":
+        response = await api.post(url, data);
         break;
       default:
         response = await api.get(url);

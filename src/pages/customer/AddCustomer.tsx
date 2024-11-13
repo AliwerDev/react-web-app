@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import useWebApp from "../../hooks/use-webapp";
 import Input from "../../components/input/Input";
+import useMainButton from "../../hooks/use-main-button";
 
 type ICustomer = {
   firstName: string;
@@ -18,15 +19,8 @@ const uzbPhoneRegex = /^\d{9}$/;
 const AddCustomer: React.FC = () => {
   const webapp = useWebApp();
   const submitRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    webapp.MainButton.text = "Qo'shish";
-    webapp.MainButton.onClick(() => submitRef.current?.click());
-    webapp.MainButton.show();
-    webapp.MainButton.enable();
-  }, [webapp]);
-
   const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
+  const { toggleProgress } = useMainButton({ ref: submitRef, text: "Qo'shish" });
 
   const clearForm = () => {
     setFocus("firstName");
@@ -34,9 +28,10 @@ const AddCustomer: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<ICustomer> = (data) => {
-    webapp.MainButton?.showProgress(true);
+    toggleProgress(true);
+
     window.setTimeout(() => {
-      webapp.MainButton?.hideProgress();
+      toggleProgress(false);
       webapp.showPopup(
         {
           title: "🎉 Mijoz muvaffaqqiyatli qo'shildi!",

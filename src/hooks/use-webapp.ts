@@ -48,7 +48,7 @@ type ShowPopup = (
   callback?: (buttonId: string) => void
 ) => void;
 
-interface TelegramWebApp {
+export interface TelegramWebApp {
   initData: string;
   initDataUnsafe: {
     query_id?: string;

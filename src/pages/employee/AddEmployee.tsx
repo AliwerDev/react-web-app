@@ -1,18 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Select from "../../components/select/Select";
-import Input from "../../components/input/Input";
 import useWebApp from "../../hooks/use-webapp";
-
-const roles = [
-  { value: "seller", label: "Sotuvchi" },
-  { value: "director", label: "Direktor" },
-  { value: "purchaser", label: "Xarid qiluvchi" },
-  { value: "sewer", label: "Bichuvchi" },
-  { value: "tailor", label: "Tikuvchi" },
-  { value: "packer", label: "Upakovkachi" },
-  { value: "warehouse_worker", label: "Skladchi" },
-];
+import useMainButton from "../../hooks/use-main-button";
+import { request } from "../../services/api";
+import Form, { IField } from "../../components/form/Form";
+import useApi from "../../hooks/use-api";
+import { makeOptions } from "../../utils/helpers";
+import { useParams } from "react-router-dom";
+import PageTitle from "../../components/page-title";
 
 type IEmployee = {
   firstName: string;
@@ -21,7 +16,7 @@ type IEmployee = {
 };
 
 const initialValues: IEmployee = {
-  role: roles[0].value,
+  role: "BUYER",
   firstName: "",
   phoneNumber: "",
 };
@@ -30,22 +25,48 @@ const uzbPhoneRegex = /^\d{9}$/;
 
 const AddEmployee: React.FC = () => {
   const webapp = useWebApp();
+  const { id } = useParams();
   const submitRef = useRef<HTMLButtonElement>(null);
+  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
+  const { toggleProgress } = useMainButton({ ref: submitRef, text: "+ Hodim qo'shish" });
+  const { data: roles = [] } = useApi("user/roles");
+  const { data: user = {} } = useApi<any>(`user/${id}`, !!id);
 
-  useEffect(() => {
-    webapp.MainButton.text = "Hodim qo'shish";
-    webapp.MainButton.onClick(() => submitRef.current?.click());
-    webapp.MainButton.show();
-    webapp.MainButton.enable();
-  }, [webapp]);
-
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setFocus,
-    // formState: { isValid },
-  } = useForm({ defaultValues: initialValues });
+  const fields = useMemo((): IField[] => {
+    return [
+      {
+        label: "Ism",
+        name: "firstName",
+        rules: { required: true, minLength: { value: 3, message: "Ism kamida 3 harf bo'lishi kerak" } },
+      },
+      {
+        label: "Familiya",
+        name: "lastName",
+      },
+      {
+        label: "Telefon raqam",
+        name: "phoneNumber",
+        type: "phone",
+        placeholder: "99 999 99 99",
+        rules: {
+          required: true,
+          maxLength: { value: 9 },
+          pattern: {
+            value: uzbPhoneRegex,
+            message: "Telefon raqam formati xato, (Misol: +998901234567)",
+          },
+        },
+      },
+      {
+        label: "Hodim roli",
+        name: "roles",
+        type: "select",
+        options: makeOptions(roles as string[]),
+        isMulti: true,
+        rules: { required: true },
+      },
+    ];
+  }, [roles]);
 
   const clearForm = () => {
     setFocus("firstName");
@@ -53,57 +74,52 @@ const AddEmployee: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<IEmployee> = (data) => {
-    webapp.MainButton?.showProgress(true);
-    window.setTimeout(() => {
-      webapp.MainButton?.hideProgress();
-      webapp.showPopup(
-        {
-          title: "🎉 Muvaffaqqiyatli qo'shildi!",
-          message: `Ismi: ${data.firstName}, Lavozimi: ${data.role}, Telefon: +998${data.phoneNumber}`,
-          buttons: [
-            { id: "CLOSE", text: "Yopish", type: "default" },
-            { id: "AGAIN", text: "Yana qo'shish", type: "default" },
-          ],
-        },
-        (id) => {
-          if (id === "AGAIN") clearForm();
-          else if (id === "CLOSE") {
-            webapp.close();
+    toggleProgress(true);
+
+    request({
+      url: id ? `/user/${id}` : "/user",
+      method: id ? "PUT" : "POST",
+      data,
+      success: () => {
+        webapp.showPopup(
+          {
+            title: "🎉 Muvaffaqqiyatli qo'shildi!",
+            message: `Ismi: ${data.firstName}, Lavozimi: ${data.role}, Telefon: +998${data.phoneNumber}`,
+            buttons: [
+              { id: "CLOSE", text: "Yopish", type: "default" },
+              { id: "AGAIN", text: "Yana qo'shish", type: "default" },
+            ],
+          },
+          (id) => {
+            if (id === "AGAIN") clearForm();
+            else if (id === "CLOSE") {
+              webapp.close();
+            }
           }
-        }
-      );
-    }, 2000);
-    console.log(data);
+        );
+      },
+    });
   };
+
+  useEffect(() => {
+    user.phoneNumber = user.phoneNumber?.slice(4);
+    if (user.id) reset(user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="main-container">
-      <h1>Hodim qo'shish</h1>
-      <p>Hodim qo'shish uchun quidagi malumotlarni to'ldiring:</p>
+      <PageTitle type={id ? "edit" : "create"} label="Hodim" />
 
-      <form style={{ marginBlock: "20px" }} onSubmit={handleSubmit(onSubmit)}>
-        <Input label="Ism" control={control} placeholder="Ism kiriting" name="firstName" rules={{ required: true, minLength: { value: 3, message: "Ism kamida 3 harf bo'lishi kerak" } }} />
-
-        <Input
-          label="Telefon raqam"
-          control={control}
-          name="phoneNumber"
-          type="phone"
-          placeholder="99 999 99 99"
-          rules={{
-            required: true,
-            maxLength: { value: 9 },
-            pattern: {
-              value: uzbPhoneRegex,
-              message: "Telefon raqam formati xato, (Misol: +998901234567)",
-            },
-          }}
-        />
-
-        <Select label="Hodim roli" placeholder="Rol qidirish" control={control} name="role" options={roles} rules={{ required: true }} />
-
-        <button ref={submitRef} type="submit" className="hidden" />
-      </form>
+      <Form
+        style={{ marginBlock: "20px" }}
+        {...{ control, onSubmit, handleSubmit, fields }}
+        submitButton={
+          <button ref={submitRef} type="submit" className="hidden">
+            Submit
+          </button>
+        }
+      />
     </div>
   );
 };

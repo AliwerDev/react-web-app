@@ -7,3 +7,7 @@ export const inputErrorMessage = (error: FieldError, label = "") => {
 
   return "";
 };
+
+export const makeOptions = (arr: string[]) => {
+  return arr.map((item) => ({ label: item, value: item }));
+};
