@@ -9,6 +9,7 @@ import { theme } from "../../theme";
 import usePaginatedData from "../../hooks/use-paginated-data";
 import Pagination from "../../components/pagination";
 import PageTitle from "../../components/page-title";
+import { User } from "../../utils/models";
 
 const Employees = () => {
   const webapp = useWebApp();
@@ -24,7 +25,7 @@ const Employees = () => {
     [webapp]
   );
 
-  const columns: TableColumn[] = useMemo(
+  const columns: TableColumn<User>[] = useMemo(
     () => [
       { key: "index", label: "#", width: "30px", type: "index", align: "center", extra: page * size },
       { key: "firstName", label: "Ismi" },

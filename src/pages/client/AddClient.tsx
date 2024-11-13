@@ -7,24 +7,24 @@ import Form, { IField } from "../../components/form/Form";
 import { useParams } from "react-router-dom";
 import useApi from "../../hooks/use-api";
 import PageTitle from "../../components/page-title";
-import { Provider } from "../../utils/models";
+import { Client } from "../../utils/models";
 import { uzbPhoneRegex } from "../../utils/constants";
 
-const initialValues: Partial<Provider> = {
+const initialValues: Partial<Client> = {
   firstName: "",
   lastName: "",
   phoneNumber: "",
 };
 
-const AddProvider: React.FC = () => {
+const AddClient: React.FC = () => {
   const webapp = useWebApp();
   const { id } = useParams();
   const submitRef = useRef<HTMLButtonElement>(null);
   const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
   const { toggleProgress } = useMainButton({ ref: submitRef, text: "+ Qo'shish" });
-  const { data: provider } = useApi<Provider>(`provider/${id}`, !!id);
+  const { data: client } = useApi<Client>(`client/${id}`, !!id);
 
-  const fields = useMemo((): IField<Provider>[] => {
+  const fields = useMemo((): IField<Client>[] => {
     return [
       {
         label: "Ism",
@@ -57,11 +57,11 @@ const AddProvider: React.FC = () => {
     reset(initialValues);
   };
 
-  const onSubmit: SubmitHandler<Provider> = (data) => {
+  const onSubmit: SubmitHandler<Client> = (data) => {
     toggleProgress(true);
     data.phoneNumber = "+998" + data.phoneNumber;
     request({
-      url: id ? `/provider/${id}` : "/provider",
+      url: id ? `/client/${id}` : "/client",
       method: id ? "PUT" : "POST",
       data,
       success: () => {
@@ -86,16 +86,16 @@ const AddProvider: React.FC = () => {
   };
 
   useEffect(() => {
-    if (provider) {
-      provider.phoneNumber = provider.phoneNumber?.slice(4);
-      reset(provider);
+    if (client) {
+      client.phoneNumber = client.phoneNumber?.slice(4);
+      reset(client);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider]);
+  }, [client]);
 
   return (
     <div className="main-container">
-      <PageTitle type={id ? "edit" : "create"} label="Hom ashyo sotuvchi" />
+      <PageTitle type={id ? "edit" : "create"} label="Haridor" />
 
       <Form
         style={{ marginBlock: "20px" }}
@@ -110,4 +110,4 @@ const AddProvider: React.FC = () => {
   );
 };
 
-export default AddProvider;
+export default AddClient;

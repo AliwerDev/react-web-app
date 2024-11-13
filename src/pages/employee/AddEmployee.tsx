@@ -8,20 +8,15 @@ import useApi from "../../hooks/use-api";
 import { makeOptions } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 import PageTitle from "../../components/page-title";
+import { User } from "../../utils/models";
+import { uzbPhoneRegex } from "../../utils/constants";
 
-type IEmployee = {
-  firstName: string;
-  phoneNumber: string;
-  role: string;
-};
-
-const initialValues: IEmployee = {
-  role: "BUYER",
+const initialValues: Partial<User> = {
   firstName: "",
+  lastName: "",
   phoneNumber: "",
+  roles: [],
 };
-
-const uzbPhoneRegex = /^\d{9}$/;
 
 const AddEmployee: React.FC = () => {
   const webapp = useWebApp();
@@ -30,9 +25,9 @@ const AddEmployee: React.FC = () => {
   const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
   const { toggleProgress } = useMainButton({ ref: submitRef, text: "+ Hodim qo'shish" });
   const { data: roles = [] } = useApi("user/roles");
-  const { data: user = {} } = useApi<any>(`user/${id}`, !!id);
+  const { data: user } = useApi<User>(`user/${id}`, !!id);
 
-  const fields = useMemo((): IField[] => {
+  const fields = useMemo((): IField<User>[] => {
     return [
       {
         label: "Ism",
@@ -73,7 +68,7 @@ const AddEmployee: React.FC = () => {
     reset(initialValues);
   };
 
-  const onSubmit: SubmitHandler<IEmployee> = (data) => {
+  const onSubmit: SubmitHandler<User> = (data) => {
     toggleProgress(true);
 
     request({
@@ -84,7 +79,7 @@ const AddEmployee: React.FC = () => {
         webapp.showPopup(
           {
             title: "🎉 Muvaffaqqiyatli qo'shildi!",
-            message: `Ismi: ${data.firstName}, Lavozimi: ${data.role}, Telefon: +998${data.phoneNumber}`,
+            message: `Ismi: ${data.firstName}, Telefon: +998${data.phoneNumber}`,
             buttons: [
               { id: "CLOSE", text: "Yopish", type: "default" },
               { id: "AGAIN", text: "Yana qo'shish", type: "default" },
@@ -102,8 +97,10 @@ const AddEmployee: React.FC = () => {
   };
 
   useEffect(() => {
-    user.phoneNumber = user.phoneNumber?.slice(4);
-    if (user.id) reset(user);
+    if (user) {
+      user.phoneNumber = user.phoneNumber?.slice(4);
+      reset(user);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -111,7 +108,7 @@ const AddEmployee: React.FC = () => {
     <div className="main-container">
       <PageTitle type={id ? "edit" : "create"} label="Hodim" />
 
-      <Form
+      <Form<User>
         style={{ marginBlock: "20px" }}
         {...{ control, onSubmit, handleSubmit, fields }}
         submitButton={

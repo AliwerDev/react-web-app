@@ -134,8 +134,9 @@ const globalStyles = css`
   }
 
   .pages {
+    margin-top: 30px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     align-items: stretch;
     grid-auto-rows: 45px;

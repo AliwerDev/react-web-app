@@ -6,7 +6,7 @@ import { theme } from "../theme";
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
 
   ul {
     display: flex;

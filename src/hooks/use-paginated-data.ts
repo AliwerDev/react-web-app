@@ -3,8 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { api } from "../services/api";
 
-type Data = Record<string, any>;
-
 // Interface for the paginated response from the backend
 interface PaginatedResponse<T> {
   totalPages: number;
@@ -17,9 +15,9 @@ interface PaginatedResponse<T> {
 }
 
 // Custom hook
-const usePaginatedData = (apiUrl: string, pageSize: number = 10) => {
+const usePaginatedData = <T>(apiUrl: string, pageSize: number = 10, changeParam = true) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [data, setData] = useState<Data[]>([]);
+  const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -28,7 +26,7 @@ const usePaginatedData = (apiUrl: string, pageSize: number = 10) => {
   const size: number = parseInt(searchParams.get("size") || String(pageSize), 10);
 
   // Cache for paginated data using useMemo
-  const cache = useMemo(() => new Map<number, Data[]>(), []);
+  const cache = useMemo(() => new Map<number, T[]>(), []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +41,7 @@ const usePaginatedData = (apiUrl: string, pageSize: number = 10) => {
       setError(null);
 
       try {
-        const response = await api.get<PaginatedResponse<Data>>(apiUrl, {
+        const response = await api.get<PaginatedResponse<T>>(apiUrl, {
           params: { page, size },
         });
         const result = response.data;
@@ -73,7 +71,7 @@ const usePaginatedData = (apiUrl: string, pageSize: number = 10) => {
   };
 
   useEffect(() => {
-    if (!searchParams.get("page")) updatePage(0);
+    if (changeParam && !searchParams.get("page")) updatePage(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

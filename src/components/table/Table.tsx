@@ -2,8 +2,8 @@ import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 import { theme } from "../../theme";
 
-export type TableColumn = {
-  key: string;
+export type TableColumn<T> = {
+  key: keyof T | "index" | "actions";
   label: string;
   width?: string;
   type?: "index" | "date" | "actions";
@@ -12,21 +12,17 @@ export type TableColumn = {
   customColumn?: (value: any) => React.ReactNode;
 };
 
-export type TableRow = {
-  [key: string]: React.ReactNode;
-};
-
 interface TableProps {
-  columns: TableColumn[];
-  rows: TableRow[];
+  columns: TableColumn<any>[];
+  rows: any[];
   loading?: boolean;
   className?: string;
   rowKey?: string;
 }
 
-const Table: React.FC<TableProps> = ({ columns, loading, rows, className = "", rowKey = "id" }) => {
-  const getColumn = useCallback((col: TableColumn, row: TableRow, rowIndex: number) => {
-    const key = col.key;
+const Table = ({ columns, loading, rows, className = "", rowKey = "id" }: TableProps) => {
+  const getColumn = useCallback((col: TableColumn<any>, row: any, rowIndex: number) => {
+    const key = col.key as string;
     const style: any = col.width ? { maxWidth: col.width, minWidth: col.width, width: col.width } : { minWidth: "100px" };
     if (col.align) style.textAlign = col.align;
 
@@ -45,14 +41,14 @@ const Table: React.FC<TableProps> = ({ columns, loading, rows, className = "", r
         <thead>
           <tr>
             {columns.map((col) => (
-              <th key={col.key} style={{ maxWidth: col.width || "auto", textAlign: col.align || "start" }}>
+              <th key={col.key as string} style={{ maxWidth: col.width || "auto", textAlign: col.align || "start" }}>
                 {col.label}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, rowIndex) => (
+          {rows.map((row: any, rowIndex) => (
             <tr key={row[rowKey] as React.Key}>{columns.map((col) => getColumn(col, row, rowIndex))}</tr>
           ))}
         </tbody>

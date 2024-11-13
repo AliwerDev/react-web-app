@@ -9,23 +9,23 @@ import { theme } from "../../theme";
 import usePaginatedData from "../../hooks/use-paginated-data";
 import Pagination from "../../components/pagination";
 import PageTitle from "../../components/page-title";
-import { Provider } from "../../utils/models";
+import { Client } from "../../utils/models";
 
-const Providers = () => {
+const Clients = () => {
   const webapp = useWebApp();
   const navigate = useNavigate();
-  const { data, loading, setPage, totalPages, page, size } = usePaginatedData("/provider/search");
+  const { data, loading, setPage, totalPages, page, size } = usePaginatedData("/client/search");
 
   const showConfirm = useCallback(
     (id: string) => () => {
-      webapp.showConfirm(`Rostdan ham ushbu sotuvchini o'chirmoqchimisiz?`, (confirmed) => {
+      webapp.showConfirm(`Rostdan ham ushbu haridorni o'chirmoqchimisiz?`, (confirmed) => {
         console.log(confirmed);
       });
     },
     [webapp]
   );
 
-  const columns: TableColumn<Provider>[] = [
+  const columns: TableColumn<Client>[] = [
     { key: "index", label: "#", width: "30px", type: "index", align: "center", extra: page * size },
     { key: "firstName", label: "Ismi" },
     { key: "lastName", label: "Familyasi" },
@@ -39,7 +39,7 @@ const Providers = () => {
       customColumn: (row) => {
         return (
           <Flex gap="10px" align="center" justify="center">
-            <Icon onClick={() => navigate(`/providers/edit/${row.id}`)} icon="icon-pencil" />
+            <Icon onClick={() => navigate(`/clients/edit/${row.id}`)} icon="icon-pencil" />
             <Icon onClick={showConfirm(row.id)} icon="icon-trash" color="red" />
           </Flex>
         );
@@ -50,11 +50,11 @@ const Providers = () => {
   return (
     <>
       <div className="main-container">
-        <PageTitle type="list" label="Hom ashyo sotuvchi" actions={<Button onClick={() => navigate("/providers/add")} size="small" icon={<Icon icon="icon-plus" color={theme.buttonTextColor} />} />} />
+        <PageTitle type="list" label="Haridor" actions={<Button onClick={() => navigate("/clients/add")} size="small" icon={<Icon icon="icon-plus" color={theme.buttonTextColor} />} />} />
       </div>
       <Table loading={loading} columns={columns} rows={data} />
       <Pagination initialPage={page} onChange={setPage} pageCount={totalPages} />
     </>
   );
 };
-export default Providers;
+export default Clients;

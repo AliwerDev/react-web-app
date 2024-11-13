@@ -7,68 +7,62 @@ import Form, { IField } from "../../components/form/Form";
 import { useParams } from "react-router-dom";
 import useApi from "../../hooks/use-api";
 import PageTitle from "../../components/page-title";
-import { Provider } from "../../utils/models";
-import { uzbPhoneRegex } from "../../utils/constants";
+import { Material } from "../../utils/models";
+import { makeOptions } from "../../utils/helpers";
+import { units, unitsLabels } from "../../utils/constants";
 
-const initialValues: Partial<Provider> = {
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
+const initialValues: Partial<Material> = {
+  name: "",
+  unitOfMeasurement: "PIECE",
+  type: "RAW",
 };
 
-const AddProvider: React.FC = () => {
+const AddSemiFinishedProduct = () => {
   const webapp = useWebApp();
   const { id } = useParams();
   const submitRef = useRef<HTMLButtonElement>(null);
   const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: initialValues });
   const { toggleProgress } = useMainButton({ ref: submitRef, text: "+ Qo'shish" });
-  const { data: provider } = useApi<Provider>(`provider/${id}`, !!id);
+  const { data: material } = useApi<Material>(`material/${id}`, !!id);
 
-  const fields = useMemo((): IField<Provider>[] => {
-    return [
+  const fields = useMemo(() => {
+    const items: IField<Material>[] = [
       {
-        label: "Ism",
-        name: "firstName",
-        rules: { required: true, minLength: { value: 3, message: "Ism kamida 3 harf bo'lishi kerak" } },
-      },
-      {
-        label: "Familiya",
-        name: "lastName",
-      },
-      {
-        label: "Telefon raqam",
-        name: "phoneNumber",
-        type: "phone",
-        placeholder: "99 999 99 99",
-        rules: {
-          required: true,
-          maxLength: { value: 9, message: "Telefon raqam formati xato, (Misol: +998901234567)" },
-          pattern: {
-            value: uzbPhoneRegex,
-            message: "Telefon raqam formati xato, (Misol: +998901234567)",
-          },
-        },
+        label: "Nomi",
+        name: "name",
+        rules: { required: true },
       },
     ];
-  }, []);
+
+    if (!id) {
+      items.push({
+        label: "O'lchov birligi",
+        name: "unitOfMeasurement",
+        type: "select",
+        options: makeOptions(units, unitsLabels),
+      });
+    }
+    return items;
+  }, [id]);
 
   const clearForm = () => {
-    setFocus("firstName");
+    setFocus("name");
     reset(initialValues);
   };
 
-  const onSubmit: SubmitHandler<Provider> = (data) => {
+  const onSubmit: SubmitHandler<Material> = (data) => {
     toggleProgress(true);
-    data.phoneNumber = "+998" + data.phoneNumber;
+    if (!id) data.type = "SEMI_FINISHED";
+
     request({
-      url: id ? `/provider/${id}` : "/provider",
+      url: id ? `/material/${id}` : "/material",
       method: id ? "PUT" : "POST",
       data,
       success: () => {
         webapp.showPopup(
           {
             title: "🎉 Muvaffaqqiyatli qo'shildi!",
-            message: `Ismi: ${data.firstName}, Telefon: +998${data.phoneNumber}`,
+            message: `Nomi: ${data.name}, O'lchov birligi: ${data.unitOfMeasurement}`,
             buttons: [
               { id: "CLOSE", text: "Yopish", type: "default" },
               { id: "AGAIN", text: "Yana qo'shish", type: "default" },
@@ -86,18 +80,17 @@ const AddProvider: React.FC = () => {
   };
 
   useEffect(() => {
-    if (provider) {
-      provider.phoneNumber = provider.phoneNumber?.slice(4);
-      reset(provider);
+    if (material) {
+      reset({ name: material.name });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider]);
+  }, [material]);
 
   return (
     <div className="main-container">
-      <PageTitle type={id ? "edit" : "create"} label="Hom ashyo sotuvchi" />
+      <PageTitle type={id ? "edit" : "create"} label="Yarm tayyor mahsulot" />
 
-      <Form
+      <Form<Material>
         style={{ marginBlock: "20px" }}
         {...{ control, onSubmit, handleSubmit, fields }}
         submitButton={
@@ -110,4 +103,4 @@ const AddProvider: React.FC = () => {
   );
 };
 
-export default AddProvider;
+export default AddSemiFinishedProduct;

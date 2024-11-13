@@ -8,6 +8,6 @@ export const inputErrorMessage = (error: FieldError, label = "") => {
   return "";
 };
 
-export const makeOptions = (arr: string[]) => {
-  return arr.map((item) => ({ label: item, value: item }));
+export const makeOptions = (arr: string[], labelsObject?: Record<string, string>) => {
+  return arr.map((item) => ({ value: item, label: labelsObject ? labelsObject[item] : item }));
 };
