@@ -43,13 +43,6 @@ const InputStyledContainer = styled.div`
   .phone-input-container {
     position: relative;
 
-    /* For Chrome, Safari, Edge, and Opera */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
     input[type="number"] {
       padding-left: 48px;
     }
@@ -64,6 +57,13 @@ const InputStyledContainer = styled.div`
       height: 18px;
       color: ${theme.textColor};
     }
+  }
+
+  /* For Chrome, Safari, Edge, and Opera */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;
 

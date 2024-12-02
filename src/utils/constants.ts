@@ -3,7 +3,7 @@ export const units = ["KG", "M", "PIECE"];
 export const materialTypes = ["RAW", "SEMI_FINISHED"];
 
 export const unitsLabels: any = {
-  KG: "Kilogramm",
+  KG: "Kilogram",
   M: "Metr",
   PIECE: "Dona",
 };

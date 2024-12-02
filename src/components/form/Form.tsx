@@ -18,6 +18,7 @@ export interface IField<T> {
   isMulti?: boolean;
   isDate?: boolean;
   isTime?: boolean;
+  readOnly?: boolean;
 }
 
 interface FormProps<T> {
@@ -33,10 +34,36 @@ interface FormProps<T> {
 const Form = <T,>({ fields, onSubmit, handleSubmit, control, submitButton, style = {} }: FormProps<T>) => {
   return (
     <form style={style} onSubmit={handleSubmit(onSubmit)}>
-      {fields.map((field) => {
-        if (field.type === "select") return <Select isMulti={!!field.isMulti} name={field.name as string} label={field.label} placeholder={field.placeholder} control={control} options={field.options || []} rules={field.rules} />;
-        if (field.type === "phone") return <Input type="phone" name={field.name as string} label={field.label} placeholder={field.placeholder} control={control} rules={field.rules} />;
-        return <Input type={field.type || "text"} name={field.name as string} label={field.label} placeholder={field.placeholder} control={control} rules={field.rules} />;
+      {fields.map(({ type, name, label, placeholder, rules, options, isMulti, isSearchable, readOnly }) => {
+        if (type === "select")
+          return (
+            <Select
+              readOnly={readOnly}
+              key={name as string}
+              isMulti={!!isMulti}
+              isSearchable={!!isSearchable}
+              name={name as string}
+              label={label}
+              placeholder={placeholder}
+              control={control}
+              options={options || []}
+              rules={rules}
+              //
+            />
+          );
+        return (
+          <Input
+            readOnly={readOnly}
+            key={name as string}
+            type={type || "text"}
+            name={name as string}
+            label={label}
+            placeholder={placeholder}
+            control={control}
+            rules={rules}
+            //
+          />
+        );
       })}
 
       {submitButton ? submitButton : <button type="submit">submit</button>}

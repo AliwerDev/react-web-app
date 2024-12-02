@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import useWebApp from "../../hooks/use-webapp";
 import useMainButton from "../../hooks/use-main-button";
@@ -15,7 +15,6 @@ const initialValues: Partial<User> = {
   firstName: "",
   lastName: "",
   phoneNumber: "",
-  roles: [],
 };
 
 const AddEmployee: React.FC = () => {
@@ -54,47 +53,49 @@ const AddEmployee: React.FC = () => {
       },
       {
         label: "Hodim roli",
-        name: "roles",
+        name: "role",
         type: "select",
         options: makeOptions(roles as string[]),
-        isMulti: true,
         rules: { required: true },
       },
     ];
   }, [roles]);
 
-  const clearForm = () => {
+  const clearForm = useCallback(() => {
     setFocus("firstName");
     reset(initialValues);
-  };
+  }, [reset, setFocus]);
 
-  const onSubmit: SubmitHandler<User> = (data) => {
-    toggleProgress(true);
+  const onSubmit: SubmitHandler<User> = useCallback(
+    (data) => {
+      toggleProgress(true);
 
-    request({
-      url: id ? `/user/${id}` : "/user",
-      method: id ? "PUT" : "POST",
-      data,
-      success: () => {
-        webapp.showPopup(
-          {
-            title: "🎉 Muvaffaqqiyatli qo'shildi!",
-            message: `Ismi: ${data.firstName}, Telefon: +998${data.phoneNumber}`,
-            buttons: [
-              { id: "CLOSE", text: "Yopish", type: "default" },
-              { id: "AGAIN", text: "Yana qo'shish", type: "default" },
-            ],
-          },
-          (id) => {
-            if (id === "AGAIN") clearForm();
-            else if (id === "CLOSE") {
-              webapp.close();
+      request({
+        url: id ? `/user/${id}` : "/user",
+        method: id ? "PUT" : "POST",
+        data,
+        success: () => {
+          webapp.showPopup(
+            {
+              title: "🎉 Muvaffaqqiyatli qo'shildi!",
+              message: `Ismi: ${data.firstName}, Telefon: +998${data.phoneNumber}`,
+              buttons: [
+                { id: "CLOSE", text: "Yopish", type: "default" },
+                { id: "AGAIN", text: "Yana qo'shish", type: "default" },
+              ],
+            },
+            (id) => {
+              if (id === "AGAIN") clearForm();
+              else if (id === "CLOSE") {
+                webapp.close();
+              }
             }
-          }
-        );
-      },
-    });
-  };
+          );
+        },
+      });
+    },
+    [clearForm, id, toggleProgress, webapp]
+  );
 
   useEffect(() => {
     if (user) {

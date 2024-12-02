@@ -5,7 +5,7 @@ export type User = {
   firstName: string;
   lastName?: string;
   phoneNumber: string;
-  roles: string[];
+  role: string;
 };
 
 export type Provider = {

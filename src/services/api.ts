@@ -1,15 +1,15 @@
 import axios, { AxiosResponse, AxiosError, Method, InternalAxiosRequestConfig } from "axios";
 
 export const api = axios.create({
-  baseURL: "http://212.56.43.170/api/v1",
+  // baseURL: "http://212.56.43.170/api/v1",
+  baseURL: "https://dev.sirojiddinsaidov.uz/api/v1",
 });
-
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (config.headers) {
-      (config.headers as Record<string, string>).TimeZone = timezone;
+      (config.headers as Record<string, string>).Hash = "047bbb5fbc3b13d7dad777a75134e22029cfbf4c0b53bc8a443a358bd6177386";
+      (config.headers as Record<string, string>).DataCheckString = `auth_date=1731233043:chat_instance=-1318221339829770145:chat_type=sender:user={"id":1189809266,"first_name":"Dilshod","last_name":"Latipov","username":"dilshodlatipov","language_code":"en","allows_write_to_pm":true}`;
     }
     return config;
   },

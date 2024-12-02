@@ -31,9 +31,9 @@ const Employees = () => {
       { key: "firstName", label: "Ismi" },
       { key: "lastName", label: "Familyasi" },
       {
-        key: "roles",
+        key: "role",
         label: "Rollar",
-        customColumn: (row) => row.roles?.join(", "),
+        // customColumn: (row) => row.roles?.join(", "),
       },
       {
         key: "actions",

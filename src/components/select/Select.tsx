@@ -19,15 +19,17 @@ interface SelectProps {
   label?: string;
   rules?: Record<string, any>;
   isSearchable?: boolean;
+  readOnly?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false, placeholder = "Select...", label, rules = {}, isSearchable = false }) => {
+const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false, placeholder = "Select...", label, rules = {}, readOnly, isSearchable = false }) => {
   return (
     <StyledSelectContainer>
       <Controller
         name={name}
         control={control}
         rules={rules}
+        disabled={readOnly}
         render={({ field, fieldState: { error } }) => (
           <>
             {label ? (
@@ -43,6 +45,7 @@ const Select: React.FC<SelectProps> = ({ control, name, options, isMulti = false
               placeholder={placeholder}
               isSearchable={isSearchable}
               classNamePrefix="react-select"
+              isDisabled={readOnly}
               onChange={(selected) => {
                 const value = isMulti ? (selected as MultiValue<Option>)?.map((option) => option.value) || [] : (selected as SingleValue<Option>)?.value || null;
                 field.onChange(value);

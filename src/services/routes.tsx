@@ -22,6 +22,11 @@ const AddProduct = lazy(() => import("../pages/product/AddProduct"));
 const SemiFinishedProducts = lazy(() => import("../pages/semi-finished-product/SemiFinishedProducts"));
 const AddSemiFinishedProduct = lazy(() => import("../pages/semi-finished-product/AddSemiFinishedProduct"));
 
+// Processes
+const PurchaseRaw = lazy(() => import("../pages/processes/PurchaseRaw"));
+const GetRawForCutting = lazy(() => import("../pages/processes/GetRawForCutting"));
+const AddCutRaw = lazy(() => import("../pages/processes/AddCutRaw"));
+
 // Define routes
 
 const routes: RouteObject[] = [
@@ -78,6 +83,11 @@ const routes: RouteObject[] = [
           { path: "/semi-finished-products/edit/:id", element: <AddSemiFinishedProduct /> },
         ],
       },
+
+      { path: "/purchase-raw", element: <PurchaseRaw /> },
+      { path: "/get-raw-for-cutting", element: <GetRawForCutting /> },
+      { path: "/add-cut-raw", element: <AddCutRaw /> },
+
       { path: "*", element: <h1>Page not found</h1> },
     ],
   },
