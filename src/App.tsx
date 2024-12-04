@@ -2,7 +2,6 @@ import React, { Suspense, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./services/routes";
 import useWebApp from "./hooks/use-webapp";
-import { api } from "./services/api";
 
 const router = createBrowserRouter(routes);
 
@@ -16,8 +15,8 @@ const App: React.FC = () => {
     webapp.disableVerticalSwipes();
     webapp.enableClosingConfirmation();
 
-    api.defaults.headers.common["DataCheckString"] = webapp.initData;
-    api.defaults.headers.common["Hash"] = webapp.initDataUnsafe?.hash;
+    // api.defaults.headers.common["DataCheckString"] = webapp.initData;
+    // api.defaults.headers.common["Hash"] = webapp.initDataUnsafe?.hash;
   }, [webapp]);
 
   return (
