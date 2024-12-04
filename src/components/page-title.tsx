@@ -2,7 +2,7 @@ import { FC } from "react";
 import Flex from "./flex";
 
 type Props = {
-  type: "list" | "create" | "edit";
+  type?: "list" | "create" | "edit";
   label: string;
   actions?: React.ReactNode;
 };
@@ -14,7 +14,7 @@ const PageTitle: FC<Props> = ({ type, label, actions = null }) => {
 
   return (
     <Flex mb="10px" align="center" justify="space-between">
-      <h1>{label}</h1>
+      <h1 style={{ marginBlock: 0 }}>{label}</h1>
       {actions}
     </Flex>
   );

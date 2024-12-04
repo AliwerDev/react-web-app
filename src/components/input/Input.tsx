@@ -1,6 +1,6 @@
 import React from "react";
 import { Control, Controller } from "react-hook-form";
-import { inputErrorMessage } from "../../utils/helpers";
+import { formatMoney, inputErrorMessage } from "../../utils/helpers";
 import InputStyledContainer from "./styled";
 import Label from "../label";
 
@@ -15,12 +15,6 @@ interface InputProps {
   maxLength?: number;
   readOnly?: boolean;
 }
-
-const formatMoney = (value: string = "") => {
-  value = String(value).trim();
-  const numericValue = value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
-  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas
-};
 
 const Input: React.FC<InputProps> = ({ control, name, placeholder = "", label, type = "text", rules = {}, defaultValue = "", readOnly }) => {
   return (

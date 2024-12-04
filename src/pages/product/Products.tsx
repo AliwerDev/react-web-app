@@ -11,6 +11,7 @@ import Pagination from "../../components/pagination";
 import PageTitle from "../../components/page-title";
 import { Product } from "../../utils/models";
 import { unitsLabels } from "../../utils/constants";
+import { formatMoney } from "../../utils/helpers";
 
 const Products = () => {
   const webapp = useWebApp();
@@ -35,8 +36,8 @@ const Products = () => {
       customColumn: (row: Product) => row.material?.name || "-",
     },
     { key: "unitOfMeasurement", label: "O'lchov birligi", width: "120px", customColumn: (row: Product) => unitsLabels[row.unitOfMeasurement] },
-    { key: "minimumPrice", label: "Minimal narx", width: "120px" },
-    { key: "sewingPrice", label: "Tikish narxi", width: "120px" },
+    { key: "minimumPrice", label: "Minimal narx", width: "120px", customColumn: (row: Product) => formatMoney(row.minimumPrice) },
+    { key: "sewingPrice", label: "Tikish narxi", width: "120px", customColumn: (row: Product) => formatMoney(row.sewingPrice) },
     {
       key: "actions",
       label: "Amallar",

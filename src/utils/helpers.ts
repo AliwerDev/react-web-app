@@ -19,3 +19,9 @@ export const makeOptionsFromUsers = (arr: any[]) => {
 export const makeOptionsFromIdName = (arr: any[]) => {
   return arr.map((item) => ({ value: item.id, label: item.name }));
 };
+
+export const formatMoney = (value: string | number = "") => {
+  value = String(value).trim();
+  const numericValue = value.replace(/[^0-9]/g, "");
+  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

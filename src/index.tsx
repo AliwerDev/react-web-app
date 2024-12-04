@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Global } from "@emotion/react";
 import globalStyles from "./theme";
-import { UserProvider } from "./services/user-context";
 
 declare global {
   interface Window {
@@ -21,9 +20,7 @@ function TelegramInitializer() {
   return (
     <>
       <Global styles={globalStyles} />
-      <UserProvider>
-        <App />
-      </UserProvider>
+      <App />
     </>
   );
 }

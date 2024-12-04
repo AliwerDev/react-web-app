@@ -29,7 +29,7 @@ const StyledSelectContainer = styled.div`
   }
 
   .react-select__control--is-focused {
-    outline: 2px solid ${theme.borderColor} !important;
+    outline: none !important;
   }
 
   .react-select__placeholder {
@@ -64,13 +64,13 @@ const StyledSelectContainer = styled.div`
   }
 
   .react-select__menu {
-    background-color: ${theme.bgColor} !important;
+    background-color: ${theme.secondaryBgColor} !important;
     border: 1px solid ${theme.borderColor} !important;
   }
 
   .react-select__option {
     color: ${theme.textColor} !important;
-    background-color: ${theme.bgColor} !important;
+    background-color: ${theme.secondaryBgColor} !important;
 
     &.react-select__option--is-selected {
       color: ${theme.bgColor};

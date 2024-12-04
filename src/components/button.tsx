@@ -31,7 +31,7 @@ const StyledButton = styled.button<{
   align-items: center;
   gap: 8px;
   font-size: ${({ size }) => (size === "small" ? "12px" : size === "large" ? "16px" : "14px")};
-  padding: ${({ size }) => (size === "small" ? "8px 16px" : size === "large" ? "16px 24px" : "12px 20px")};
+  padding: ${({ size }) => (size === "small" ? "6px 10px" : size === "large" ? "16px 24px" : "12px 20px")};
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
   border: none;
   border-radius: 4px;

@@ -22,13 +22,21 @@ const AddProduct = lazy(() => import("../pages/product/AddProduct"));
 const SemiFinishedProducts = lazy(() => import("../pages/semi-finished-product/SemiFinishedProducts"));
 const AddSemiFinishedProduct = lazy(() => import("../pages/semi-finished-product/AddSemiFinishedProduct"));
 
+const SaleHistories = lazy(() => import("../pages/sale-history/SaleHistories"));
+
 // Processes
-const PurchaseRaw = lazy(() => import("../pages/processes/PurchaseRaw"));
-const GetRawForCutting = lazy(() => import("../pages/processes/GetRawForCutting"));
-const AddCutRaw = lazy(() => import("../pages/processes/AddCutRaw"));
+const BuyingRaw = lazy(() => import("../pages/processes/buyer/BuyingRaw"));
+const GetRawForCutting = lazy(() => import("../pages/processes/cutter/GetRawForCutting"));
+const AddCutRaw = lazy(() => import("../pages/processes/cutter/AddCutRaw"));
+const SendSemiToTailor = lazy(() => import("../pages/processes/cutter/SendSemiToTailor"));
+const SendFinishedProduct = lazy(() => import("../pages/processes/tailor/SendFinishedProduct"));
+const SendToWarehouse = lazy(() => import("../pages/processes/packager/SendToWarehouse"));
+const RequestToProduct = lazy(() => import("../pages/processes/seller/RequestToProduct"));
+const SellingProduct = lazy(() => import("../pages/processes/seller/SellingProduct"));
+const CashSubmission = lazy(() => import("../pages/processes/seller/CashSubmission"));
+const ReturnProduct = lazy(() => import("../pages/processes/seller/ReturnProduct"));
 
 // Define routes
-
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -84,11 +92,21 @@ const routes: RouteObject[] = [
         ],
       },
 
-      { path: "/purchase-raw", element: <PurchaseRaw /> },
-      { path: "/get-raw-for-cutting", element: <GetRawForCutting /> },
-      { path: "/add-cut-raw", element: <AddCutRaw /> },
+      { path: "/sale-history", element: <SaleHistories /> },
 
-      { path: "*", element: <h1>Page not found</h1> },
+      { path: "/buy-raw", element: <BuyingRaw /> },
+      { path: "/get-raw", element: <GetRawForCutting /> },
+      { path: "/add-raw", element: <AddCutRaw /> },
+      { path: "/send-semi", element: <SendSemiToTailor /> },
+      { path: "/send-finished", element: <SendFinishedProduct /> },
+      { path: "/send-warehouse", element: <SendToWarehouse /> },
+      { path: "/request-to-product", element: <RequestToProduct /> },
+      { path: "/selling-product", element: <SellingProduct /> },
+      { path: "/cash-submission", element: <CashSubmission /> },
+      { path: "/return-product", element: <ReturnProduct /> },
+
+      // OTHER
+      { path: "*", element: <h2 style={{ textAlign: "center" }}>404 Page not found</h2> },
     ],
   },
 ];

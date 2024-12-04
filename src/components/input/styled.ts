@@ -14,12 +14,16 @@ const InputStyledContainer = styled.div`
     padding: 0 12px;
     border: 1px solid ${theme.borderColor};
     background-color: ${theme.bgColor};
-    border-radius: 4px;
     color: ${theme.textColor};
+    border-radius: 4px;
     text-align: start;
 
     &:focus {
-      outline: 2px solid ${theme.borderColor} !important;
+      outline: none !important;
+    }
+
+    &:is([readonly]) {
+      outline: none !important;
     }
 
     &.input-error {

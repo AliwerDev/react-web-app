@@ -1,23 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import useWebApp from "../../hooks/use-webapp";
-import useMainButton from "../../hooks/use-main-button";
-import { request } from "../../services/api";
-import Form from "../../components/form/Form";
-import { Material, User } from "../../utils/models";
-import { makeOptionsFromIdName, makeOptionsFromUsers } from "../../utils/helpers";
-import usePaginatedData from "../../hooks/use-paginated-data";
-import { unitsLabels } from "../../utils/constants";
+import useWebApp from "../../../hooks/use-webapp";
+import useMainButton from "../../../hooks/use-main-button";
+import { request } from "../../../services/api";
+import Form from "../../../components/form/Form";
+import { Material, User } from "../../../utils/models";
+import { makeOptionsFromIdName, makeOptionsFromUsers } from "../../../utils/helpers";
+import usePaginatedData from "../../../hooks/use-paginated-data";
+import { unitsLabels } from "../../../utils/constants";
 
-const AddSemiFinishedProduct = () => {
+const BuyingRaw = () => {
   const webapp = useWebApp();
   const submitRef = useRef<HTMLButtonElement>(null);
-  const { toggleProgress } = useMainButton({ ref: submitRef, text: "+ Qo'shish" });
+  const { toggleProgress } = useMainButton({ ref: submitRef, text: "So'rov yuborish" });
   const { data: providers } = usePaginatedData("/provider/search", 1000, false);
   const { data: warehouseManagers } = usePaginatedData<User>("/user/search?userRole=WAREHOUSE_MANAGER", 1000, false);
   const { data: materials } = usePaginatedData<Material>("/material/search", 1000, false);
 
-  const { control, handleSubmit, reset, setValue, watch } = useForm();
+  const { control, handleSubmit, setValue, watch } = useForm();
+
+  const quantity = watch("quantity");
+  const unitPrice = watch("unitPrice");
+  const totalAmount = quantity > 0 && unitPrice > 0 ? quantity * unitPrice : 0;
 
   const materialId = watch("materialId");
 
@@ -61,6 +65,9 @@ const AddSemiFinishedProduct = () => {
         label: "To'langan summa",
         name: "paid",
         type: "money",
+        rules: {
+          validate: (value: string) => Number(value) <= Number(totalAmount) || "To'langan summa umumiy narxdan kichik yoki teng bo'lishi kerak!",
+        },
       },
       {
         label: "Skladchi",
@@ -70,7 +77,7 @@ const AddSemiFinishedProduct = () => {
         options: makeOptionsFromUsers(warehouseManagers),
       },
     ];
-  }, [providers, materials, warehouseManagers, materialId]);
+  }, [providers, materials, warehouseManagers, materialId, totalAmount]);
 
   const onSubmit: SubmitHandler<Record<string, any>> = useCallback(
     (data) => {
@@ -82,38 +89,20 @@ const AddSemiFinishedProduct = () => {
         method: "POST",
         data,
         success: () => {
-          webapp.showPopup(
-            {
-              title: "🎉 Muvaffaqqiyatli qo'shildi!",
-              message: `Nomi: ${data.name}, O'lchov birligi: ${data.unitOfMeasurement}`,
-              buttons: [
-                { id: "CLOSE", text: "Yopish", type: "default" },
-                { id: "AGAIN", text: "Yana qo'shish", type: "default" },
-              ],
-            },
-            (id) => {
-              if (id === "AGAIN") reset({});
-              else if (id === "CLOSE") {
-                webapp.close();
-              }
-            }
-          );
+          webapp.showAlert("Sizning so'rovingiz sklatchiga yuborildi!", webapp.close);
         },
       });
     },
-    [reset, toggleProgress, webapp]
+    [toggleProgress, webapp]
   );
 
-  const quantity = watch("quantity");
-  const unitPrice = watch("unitPrice");
-
   useEffect(() => {
-    if (quantity > 0 && unitPrice > 0) {
-      setValue("totalPrice", quantity * unitPrice);
+    if (totalAmount) {
+      setValue("totalPrice", totalAmount);
     } else {
       setValue("totalPrice", "");
     }
-  }, [quantity, setValue, unitPrice]);
+  }, [totalAmount, setValue]);
 
   useEffect(() => {
     if (warehouseManagers.length) {
@@ -138,4 +127,4 @@ const AddSemiFinishedProduct = () => {
   );
 };
 
-export default AddSemiFinishedProduct;
+export default BuyingRaw;

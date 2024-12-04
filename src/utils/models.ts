@@ -28,9 +28,11 @@ export type Material = {
   unitOfMeasurement: (typeof units)[number];
   type: (typeof materialTypes)[number];
   typeOfMaterial?: (typeof materialTypes)[number];
+  maxAmount?: number;
 };
 
 export type Product = {
+  id?: string;
   productId?: string;
   name: string;
   unitOfMeasurement: (typeof units)[number];
